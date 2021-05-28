@@ -1,0 +1,11 @@
+{
+  "applymetadata.ui.label": "Apply bulk metadata",
+  "applymetadata.bulk.set": "Bulk set metadata",
+  "applymetadata.dialog.add": "Apply",
+  "bulk.metadata.submitted" : "Set bulk metadata submitted",
+  "bulk.metadata.completed" : "Set bulk metadata completed",
+  "applymetadata.dc.source": "Source",
+  "applymetadata.dc.issued": "Issued date",
+  "applymetadata.dc.subjects": "Subjects",
+  "bulk.metadata.failed": "Bulk metadata failed"
+}

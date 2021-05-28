@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<component name="com.maretha.io.bulk.edit.config" version="1.0.0">
+
+  <require>org.nuxeo.ecm.core.bulk.config</require>
+
+  
+  <extension target="org.nuxeo.ecm.core.bulk" point="actions">
+    <action name="setProperties" enabled= "false"/>
+    <action name="setProperties" bucketSize="100" batchSize="25" httpEnabled="true"
+      validationClass="maretha.io.bulk.edit.BulkEditValidator"/>
+  </extension>
+
+  <!-- Action's processor -->
+  <extension target="org.nuxeo.runtime.stream.service" point="streamProcessor">
+ 
+    <streamProcessor name="setSystemProperties" enabled="false" ></streamProcessor>
+    <streamProcessor name="setSystemProperties" class="org.nuxeo.ecm.core.bulk.action.SetSystemPropertiesAction"
+      logConfig="bulk" defaultConcurrency="2" defaultPartitions="2">
+      <policy name="default" maxRetries="3" delay="500ms" maxDelay="10s" continueOnFailure="false" />
+    </streamProcessor>
+
+
+  </extension>
+
+</component>

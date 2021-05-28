@@ -1,0 +1,10 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: maretha.io
+Bundle-Version: 1.0.0
+Bundle-Name: nuxeo-bulk-metadata-edit-core
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: maretha.io.nuxeo-bulk-metadata-edit-core;singleton=true
+Nuxeo-Component: OSGI-INF/bulk-config.xml,
+  OSGI-INF/pageproviders-contrib.xml

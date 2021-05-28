@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component name="com.maretha.io.bulk.edit.pageproviders.contrib">
+
+    <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService" point="providers">
+        
+        <genericPageProvider class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider" name="all_docs">
+          <trackUsage>true</trackUsage>
+          <property name="coreSession">#{documentManager}</property>
+          <pattern quoteParameters="false">SELECT * FROM Document WHERE  (ecm:ancestorId = :folderId OR ecm:uuid = :folderId ) AND ecm:isTrashed=0 AND ecm:isVersion=0</pattern>
+          <pageSize>50</pageSize>
+        </genericPageProvider>
+    </extension>
+
+</component>

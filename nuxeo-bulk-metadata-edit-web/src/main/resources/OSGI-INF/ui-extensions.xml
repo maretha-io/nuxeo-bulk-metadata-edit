@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<component name="coma.maretha.io.bulk.edit.resources">
+
+    <require>org.nuxeo.web.ui.resources</require>
+
+    <extension target="org.nuxeo.ecm.platform.WebResources" point="resources">
+        <resource name="bulkedit/bulk-edit-bundle.html" type="import">
+            <uri>/ui/bulkedit/bulk-edit-bundle.html</uri>
+        </resource>
+    </extension>
+    <extension target="org.nuxeo.ecm.platform.WebResources" point="bundles">
+        <bundle name="web-ui">
+            <resources append="true">
+                <resource>bulkedit/bulk-edit-bundle.html</resource>
+            </resources>
+        </bundle>
+    </extension>
+</component>

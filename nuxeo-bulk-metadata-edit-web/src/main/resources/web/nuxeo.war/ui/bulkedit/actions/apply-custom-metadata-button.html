@@ -1,0 +1,180 @@
+
+<dom-module id="apply-custom-metadata-button">
+  <template>
+    <style include="nuxeo-action-button-styles">
+
+    paper-dialog-scrollable {
+        --paper-dialog-scrollable: {
+          -webkit-overflow-scrolling: auto;
+        };
+      }
+    </style>
+
+    <nuxeo-document id="doc" doc-id="[[document.uid]]" response="{{document}}" ></nuxeo-document>
+    <nuxeo-custom-operation id="setMetadataOp" op="Bulk.RunAction" async$=[[async]] poll-interval="[[pollInterval]]"></nuxeo-custom-operation>
+
+    <div class="action" on-click="_toggleDialog">
+      <paper-icon-button id="btn" icon="[[icon]]" noink></paper-icon-button>
+        <span class="label" hidden$="[[!showLabel]]">[[_label]]</span>
+    </div>
+    <nuxeo-tooltip>[[_label]]</nuxeo-tooltip>
+
+    <nuxeo-dialog id="apply-metadata-dialog" with-backdrop on-iron-overlay-closed="_resetPopup" no-auto-focus restamp>
+      <h2>[[i18n('applymetadata.bulk.set')]]</h2>
+    <div>
+    <span>[[i18n('applymetadata.dc.source')]]:</span> <nuxeo-input value="{{source}}"  type="text" name="nature" role="widget"></nuxeo-input>
+    <br/>
+    <span>[[i18n('applymetadata.dc.issued')]]:</span> <nuxeo-date-picker value="{{issuedDate}}"></nuxeo-date-picker>
+    <br/>
+    <span>[[i18n('applymetadata.dc.subjects')]]:</span> <nuxeo-directory-suggestion directory-name="l10nsubjects" multiple="true" dbl10n="true" value="{{subjectList}}" min-chars="0"></nuxeo-directory-suggestion>
+    
+    </div>
+      <div class="buttons">
+        <paper-button dialog-dismiss>[[i18n('cancel')]]</paper-button>
+        <paper-button dialog-confirm class="primary" name="add" on-click="_add">
+          [[i18n('applymetadata.dialog.add')]]
+        </paper-button>
+      </div>
+    </nuxeo-dialog>
+
+  </template>
+
+  <script>
+    { class SetMetadataButton extends Polymer.mixinBehaviors([Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior], Nuxeo.Element) {
+
+        static get is() {
+          return 'apply-custom-metadata-button';
+        }
+
+        static get properties() {
+          return {
+       
+            document: Object,
+            source: String,
+            issuedDate: Date,
+            subjectList: Array,
+
+            icon: {
+              type: String,
+              value: 'multitenant-apple:apply_metadata',
+            },
+
+            showLabel: {
+              type: Boolean,
+              value: false,
+            },
+
+            _label: {
+              type: String,
+              computed: '_computeLabel(i18n)',
+            },
+
+            pollInterval: {
+              type: Number,
+              value: 1000,
+            },
+
+            async: {
+              type: Boolean,
+              value: true,
+            },
+          };
+        }
+
+        _computeLabel() {
+          return this.i18n('applymetadata.ui.label');
+        }
+
+
+        _toggleDialog() {
+          this.$['apply-metadata-dialog'].toggle();
+        }
+
+        _add() {
+         this._applymetadata(); 
+        }
+
+        _applymetadata() {
+          let op = this.$$('#setMetadataOp');
+          op.params = {};
+
+          let actionParams = {};
+          let queryParams = {};
+          let metadatasToApply = {};
+          
+          if(this.source) {
+            metadatasToApply['dc:source'] = this.source;
+          }
+          if (this.issuedDate) {
+            metadatasToApply['dc:issued'] = this.issuedDate;
+          }
+          if (this.issuedDate) {
+            metadatasToApply['dc:subjects'] = this.subjectList;
+          }
+
+          //pass the current document as the folderId param to the page provider
+          queryParams.folderId = '"' + this.document.uid + '"';
+          
+          actionParams.action='setProperties';
+          actionParams.providerName = 'all_docs';
+ 
+          actionParams.namedParameters = queryParams;
+          actionParams.parameters = metadatasToApply;
+
+          actionParams.parameters = JSON.stringify(metadatasToApply);
+          op.params = actionParams;
+          op.execute().then((response) => {
+          this._resetPopup();
+            let detail = { response };
+            if (this.detail) {
+              detail = typeof this.detail === 'string' ? JSON.parse(this.detail) : this.detail;
+            }
+            this.dispatchEvent(new CustomEvent(this.event, {
+              composed: true,
+              bubbles: true,
+              detail,
+            }));
+          })
+            .catch((error) => {
+              this.dispatchEvent(new CustomEvent('notify', {
+                composed: true,
+                bubbles: true,
+                detail: { message: this.errorLabel ? this.i18n('bulk.metadata.failed', error) : error },
+              }));
+              if (error.status !== 404) {
+                throw error;
+              }
+            });
+        }
+
+
+        _resetPopup() {
+          this.source = null;
+          this.issuedDate = null;
+          this.subjectList = null;
+        }
+
+        ready() {
+          super.ready();
+          this.$.setMetadataOp.addEventListener('poll-start', this._onPollStart.bind(this));
+          this.$.setMetadataOp.addEventListener('response', this._onResponse.bind(this));
+        }
+
+        _onPollStart() {
+           this.fire('notify', { message: this.i18n('bulk.metadata.submitted') });
+           this.$.btn.disabled = true;
+        }
+
+        _onResponse(response) {
+           this.fire('notify', { message: this.i18n('bulk.metadata.completed') });
+           this.$.btn.disabled = false;       
+           this.fire('navigate', { doc: this.document });
+        }
+       }
+
+      customElements.define(SetMetadataButton.is, SetMetadataButton);
+      Nuxeo.SetMetadataButton = SetMetadataButton;
+    }
+  </script>
+
+</dom-module>
