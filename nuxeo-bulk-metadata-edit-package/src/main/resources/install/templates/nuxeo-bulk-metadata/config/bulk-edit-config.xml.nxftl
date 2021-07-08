@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<component name="bulk.edit.config" version="1.0.0">
+
+  <require>com.maretha.io.bulk.edit.config</require>
+
+  <#if "${feature.bulkedit.enabled}" == "false">
+   <extension target="org.nuxeo.ecm.core.bulk" point="actions">
+    <action name="setProperties" httpEnabled = "false"/>
+   </extension>
+
+</#if>
+
+</component>

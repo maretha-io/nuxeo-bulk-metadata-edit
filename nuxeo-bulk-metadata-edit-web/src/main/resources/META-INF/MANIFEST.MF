@@ -6,4 +6,5 @@ Bundle-Version: 1.0.0
 Bundle-Name: nuxeo-bulk-metadata-edit-web
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: maretha.io.nuxeo-bulk-metadata-edit-web;singleton=true
-Nuxeo-Component: OSGI-INF/ui-extensions.xml
+Nuxeo-Component: OSGI-INF/ui-extensions.xml,
+ OSGI-INF/web-ui-properties.xml

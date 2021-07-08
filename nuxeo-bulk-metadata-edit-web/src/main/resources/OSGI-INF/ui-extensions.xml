@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<component name="coma.maretha.io.bulk.edit.resources">
+<component name="com.maretha.io.bulk.edit.resources">
 
     <require>org.nuxeo.web.ui.resources</require>
 

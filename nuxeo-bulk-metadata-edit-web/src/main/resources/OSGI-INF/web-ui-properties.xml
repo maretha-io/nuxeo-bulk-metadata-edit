@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="coma.maretha.io.web.ui.properties.contrib">
+  <require>org.nuxeo.web.ui.properties.contrib</require>
+  
+  <extension target="org.nuxeo.runtime.ConfigurationService" point="configuration">
+    <property name="org.nuxeo.web.ui.bulkedit.enabled">${feature.bulkedit.enabled:=true}</property>
+     <property name="org.nuxeo.web.ui.bulkedit.docTypes">${feature.bulkedit.docTypes:=Folder,File}</property>
+  </extension>
+</component>

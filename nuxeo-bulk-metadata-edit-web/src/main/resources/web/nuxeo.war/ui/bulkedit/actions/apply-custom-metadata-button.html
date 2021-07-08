@@ -10,6 +10,8 @@
       }
     </style>
 
+  <span  hidden$="[[!_isBulkEditEnabled()]]">
+   <span  hidden$="[[!_isBulkEditEnabledForDoc(document)]]">
     <nuxeo-document id="doc" doc-id="[[document.uid]]" response="{{document}}" ></nuxeo-document>
     <nuxeo-custom-operation id="setMetadataOp" op="Bulk.RunAction" async$=[[async]] poll-interval="[[pollInterval]]"></nuxeo-custom-operation>
 
@@ -36,11 +38,13 @@
         </paper-button>
       </div>
     </nuxeo-dialog>
+    </span>
+  </span>  
 
   </template>
 
   <script>
-    { class SetMetadataButton extends Polymer.mixinBehaviors([Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior], Nuxeo.Element) {
+    { class SetMetadataButton extends Polymer.mixinBehaviors([Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior,  Nuxeo.Configuration], Nuxeo.Element) {
 
         static get is() {
           return 'apply-custom-metadata-button';

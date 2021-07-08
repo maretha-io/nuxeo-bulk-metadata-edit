@@ -1,0 +1,32 @@
+<link rel="import" href="es6-polyfills.html">
+
+<script>
+  /* eslint-disable no-var, no-use-before-define */
+  var Nuxeo = Nuxeo || {};
+
+  Nuxeo.Configuration = {
+
+    _isBulkEditEnabled: function() {
+         return Nuxeo.UI.config && Nuxeo.UI.config.bulkedit.enabled && Nuxeo.UI.config.bulkedit.enabled === "true";
+     },
+  
+    _isBulkEditEnabledForDoc: function(document) {
+      let enabledDocTypes = [];
+
+      if( Nuxeo.UI.config && Nuxeo.UI.config.bulkedit && Nuxeo.UI.config.bulkedit.docTypes) {
+         enabledDocTypes = Nuxeo.UI.config.bulkedit.docTypes.split(",");
+      }
+      if (enabledDocTypes.length === 0 ) {
+       return true;
+      }
+      if (document && document.type && enabledDocTypes.includes(document.type)) {
+       return true;
+      }
+      
+      return false;
+     },
+     
+       
+    
+  };
+</script>

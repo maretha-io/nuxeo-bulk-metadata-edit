@@ -13,6 +13,15 @@ and install:
 ./nuxeoctl mp-install nuxeo-bulk-metadata-edit/nuxeo-bulk-metadata-edit-package/target/nuxeo-bulk-metadata-edit-package-1.0-SNAPSHOT.zip  
 ```
 
+
+### Enable/disable the bulk edit
+To disable set:
+
+```
+feature.bulkedit.enabled=false
+```
+
+
 ### Support
 This solution is provided for inspiration and fun only by [Maretha](https://maretha.io/).
 Don't hesitate to open a PR with improvments :)
