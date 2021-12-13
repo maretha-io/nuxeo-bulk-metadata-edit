@@ -2,6 +2,7 @@
 <install>
   @BUNDLES@
   @LIBS@
+  @SYSLIBS@
   @PROPERTIES@
   @TEMPLATES@
 </install>

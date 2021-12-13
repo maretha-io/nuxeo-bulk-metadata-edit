@@ -64,9 +64,19 @@
           <artifact groupId="nuxeo-studio" />
           <!-- Filter out your artifacts using their groupId for instance -->
           <artifact groupId="maretha.io*"/>
+          <artifact groupId="org.apache.logging*"/>
         </excludes>
       </artifact:set>
     </copy>
+  	
+    <copy todir="${outdir}/marketplace/install/syslib">
+      <artifact:set excludeRoots="true">
+        <includes>
+          <artifact groupId="org.apache.logging.log4j" scope="" type="!pom" />
+        </includes>
+      </artifact:set>
+    </copy>
+  	
     <nx:rmdups dir="${outdir}/nxr/lib"/>
     <!-- Temporary ZIP Nuxeo NXR to compare with base distribution NXR -->
     <zip destfile="${outdir}/nxr-${maven.project.version}.zip" basedir="${outdir}/nxr"/>
@@ -104,6 +114,16 @@
   &lt;update file=&quot;${package.root}/install/lib&quot; todir=&quot;${env.lib}&quot; /&gt;"/>
       </then>
     </if>
+  	
+    <var name="install.syslibs" value=""/>
+    <if>
+      <available file="${outdir}/marketplace/install/syslib"/>
+      <then>
+
+        <var name="install.syslibs" value="${line.separator}
+  &lt;update file=&quot;${package.root}/install/syslib&quot; todir=&quot;${env.syslib}&quot; /&gt;"/>
+      </then>
+    </if>
 
     <var
       name="install.properties"
@@ -129,6 +149,7 @@
       <filterset>
         <filter token="BUNDLES" value="${install.bundles}"/>
         <filter token="LIBS" value="${install.libs}"/>
+      	<filter token="SYSLIBS" value="${install.syslibs}"/>
         <filter token="PROPERTIES" value="${install.properties}"/>
         <filter token="TEMPLATES" value="${install.templates}"/>
       </filterset>
